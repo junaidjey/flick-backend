@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.project.flik.model.Poll;
 
 /**
- * Created by rajeevkumarsingh on 20/11/17.
+ * Created by junaid on 20/11/17.
  */
 @Repository
 public interface PollRepository extends JpaRepository<Poll, Long> {

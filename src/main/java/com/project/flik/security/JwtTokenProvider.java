@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * Created by rajeevkumarsingh on 19/08/17.
+ * Created by junaid on 19/08/17.
  */
 @Component
 public class JwtTokenProvider {

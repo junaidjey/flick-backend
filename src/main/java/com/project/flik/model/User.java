@@ -23,7 +23,7 @@ import org.hibernate.annotations.NaturalId;
 import com.project.flik.model.audit.DateAudit;
 
 /**
- * Created by rajeevkumarsingh on 01/08/17.
+ * Created by junaid on 01/08/17.
  */
 
 @Entity

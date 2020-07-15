@@ -3,7 +3,7 @@ package com.project.flik.payload;
 import javax.validation.constraints.NotBlank;
 
 /**
- * Created by rajeevkumarsingh on 02/08/17.
+ * Created by junaid on 02/08/17.
  */
 public class LoginRequest {
     @NotBlank

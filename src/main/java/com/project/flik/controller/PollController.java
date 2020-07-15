@@ -33,7 +33,7 @@ import com.project.flik.service.PollService;
 import com.project.flik.util.AppConstants;
 
 /**
- * Created by rajeevkumarsingh on 20/11/17.
+ * Created by junaid on 20/11/17.
  */
 
 @RestController

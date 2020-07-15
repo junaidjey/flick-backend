@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.project.flik.model.User;
 
 /**
- * Created by rajeevkumarsingh on 02/08/17.
+ * Created by junaid on 02/08/17.
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

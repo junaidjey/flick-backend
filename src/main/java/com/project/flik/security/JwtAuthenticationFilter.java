@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by rajeevkumarsingh on 19/08/17.
+ * Created by junaid on 19/08/17.
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 

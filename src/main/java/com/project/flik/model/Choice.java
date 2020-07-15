@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * Created by rajeevkumarsingh on 20/11/17.
+ * Created by junaid on 20/11/17.
  */
 
 @Entity

@@ -12,7 +12,7 @@ import com.project.flik.model.User;
 import com.project.flik.repository.UserRepository;
 
 /**
- * Created by rajeevkumarsingh on 02/08/17.
+ * Created by junaid on 02/08/17.
  */
 
 @Service

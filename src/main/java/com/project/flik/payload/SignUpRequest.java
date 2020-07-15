@@ -5,7 +5,7 @@ import javax.validation.constraints.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * Created by rajeevkumarsingh on 02/08/17.
+ * Created by junaid on 02/08/17.
  */
 
 public class SignUpRequest {

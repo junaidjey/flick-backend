@@ -23,7 +23,7 @@ import org.hibernate.annotations.FetchMode;
 import com.project.flik.model.audit.UserDateAudit;
 
 /**
- * Created by rajeevkumarsingh on 20/11/17.
+ * Created by junaid on 20/11/17.
  */
 @Entity
 @Table(name = "polls")

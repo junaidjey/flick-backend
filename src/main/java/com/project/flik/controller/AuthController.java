@@ -34,7 +34,7 @@ import com.project.flik.service.storage.StorageService;
 import com.project.flik.util.Utill;
 
 /**
- * Created by rajeevkumarsingh on 02/08/17.
+ * Created by junaid on 02/08/17.
  */
 @RestController
 @RequestMapping("/api/auth")

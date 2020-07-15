@@ -9,7 +9,7 @@ import com.project.flik.model.Role;
 import com.project.flik.model.RoleName;
 
 /**
- * Created by rajeevkumarsingh on 02/08/17.
+ * Created by junaid on 02/08/17.
  */
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {

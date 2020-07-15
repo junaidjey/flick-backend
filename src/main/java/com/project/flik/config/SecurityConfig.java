@@ -22,7 +22,7 @@ import com.project.flik.security.JwtAuthenticationFilter;
 
 
 /**
- * Created by rajeevkumarsingh on 01/08/17.
+ * Created by junaid on 01/08/17.
  */
 
 @Configuration
