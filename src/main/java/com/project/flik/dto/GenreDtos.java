@@ -13,5 +13,5 @@ public class GenreDtos {
 	public void setGenres(List<GenreDto> genres) {
 		this.genres = genres;
 	}
-	
+
 }

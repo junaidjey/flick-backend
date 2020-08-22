@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.project.flik.model.Genre;
 
 @Repository
-public interface GenreRepository extends JpaRepository<Genre, Long>{
+public interface GenreRepository extends JpaRepository<Genre, Long> {
 
 	Genre findByName(String name);
 

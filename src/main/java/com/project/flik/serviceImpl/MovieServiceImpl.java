@@ -1,10 +1,12 @@
 package com.project.flik.serviceImpl;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,6 +36,7 @@ import com.project.flik.model.Movie;
 import com.project.flik.model.User;
 import com.project.flik.payload.MovieResponse;
 import com.project.flik.payload.PagedResponse;
+import com.project.flik.payload.ScrapMovieVariable;
 import com.project.flik.repository.GenreRepository;
 import com.project.flik.repository.LastScrappedRepository;
 import com.project.flik.repository.LikeRepository;
@@ -63,6 +66,74 @@ public class MovieServiceImpl implements MovieService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MovieServiceImpl.class);
 
+	private static final String API_KEY = "00a7ed6256916ab89ee9dd2143df2e04";
+
+	private static final String BASE_URL = "https://image.tmdb.org/t/p/w500/";
+
+	@Override
+	public void imdbScrap() throws IOException, ParseException {
+		String searchDate = "2019-08-15";
+		LastScrapped lastScrapped = lastScrappedRepository.findFirstByOrderByIdDesc();
+		String listNumber = "1";
+		if (lastScrapped != null) {
+			searchDate = lastScrapped.getSearchDate();
+			listNumber = lastScrapped.getListNumber();
+		}
+		String url = "https://www.imdb.com/search/title/?release_date=" + searchDate + "&start=";
+
+		ScrapMovieVariable scrapMovieVariable = fatchUrl(url + listNumber);
+		if (scrapMovieVariable.getTotalMovieRecords() > Integer.parseInt(listNumber)) {
+			for (int searchPage = scrapMovieVariable.getPageStart(); searchPage < scrapMovieVariable
+					.getTotalMovieRecords(); searchPage = searchPage + 50) {
+				System.out.println(searchPage);
+				scrapMovie(url + searchPage, searchDate);
+			}
+		}
+
+		LastScrapped lastScrapped2 = lastScrappedRepository.findFirstByOrderByIdDesc();
+		if (lastScrapped2 != null) {
+			searchDate = lastScrapped2.getSearchDate();
+			listNumber = lastScrapped2.getListNumber();
+		}
+		if (scrapMovieVariable.getTotalMovieRecords() <= Integer.parseInt(listNumber)) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(sdf.parse(searchDate));
+
+			calendar.add(Calendar.DATE, 1); // number of days to add
+			String destDate = sdf.format(calendar.getTime());
+			System.out.println(destDate);
+
+			url = "https://www.imdb.com/search/title/?release_date=" + destDate + "&start=";
+			ScrapMovieVariable scrapMovieVariable2 = fatchUrl(url + "1");
+			for (int searchPage = scrapMovieVariable2.getPageStart(); searchPage < scrapMovieVariable2
+					.getTotalMovieRecords(); searchPage = searchPage + 50) {
+				System.out.println(searchPage);
+				scrapMovie(url + searchPage, destDate);
+			}
+			// fatchUrl(url);
+			// scrapMovieFromNewDate();
+		}
+	}
+
+	private ScrapMovieVariable fatchUrl(String url) throws IOException {
+		Document doc = Jsoup.connect(url).get();
+		Elements pageNumbersText = doc.select("div.desc");
+		System.out.println("Text = " + pageNumbersText.text());
+		String pageArray[] = pageNumbersText.text().split(" ");
+
+		int totalMovieRecords = Integer.parseInt(pageArray[2].replace(",", ""));
+
+		String pageMovie[] = pageArray[0].split("-");
+		int pageStart = Integer.parseInt(pageMovie[0].replace(",", ""));
+
+		ScrapMovieVariable scrapMovieVariable = new ScrapMovieVariable();
+		scrapMovieVariable.setTotalMovieRecords(totalMovieRecords);
+		scrapMovieVariable.setPageStart(pageStart);
+		return scrapMovieVariable;
+	}
+
 	public void scrapMovie(String url, String searchDate) throws IOException {
 
 		Document doc = Jsoup.connect(url).get();
@@ -85,14 +156,12 @@ public class MovieServiceImpl implements MovieService {
 							if (moviesss != null) {
 								saveEpisode(episodeUrl, moviesss.getId(), movieNumber, searchDate);
 							}
-
 						} else {
 							Movie episodeName = movieRepository.findByUrl(episodeUrl);
 							if (episodeName == null) {
 								saveEpisode(episodeUrl, movied.getId(), movieNumber, searchDate);
 							}
 						}
-
 					} catch (NullPointerException e) {
 					}
 
@@ -105,7 +174,6 @@ public class MovieServiceImpl implements MovieService {
 					}
 				}
 			}
-
 		}
 	}
 
@@ -213,7 +281,7 @@ public class MovieServiceImpl implements MovieService {
 			movie.setRunTime(time.text());
 		} catch (NullPointerException e) {
 		}
-		//movie.setGenre(genre);
+		// movie.setGenre(genre);
 
 		Movie movie1 = movieRepository.save(movie);
 
@@ -246,25 +314,25 @@ public class MovieServiceImpl implements MovieService {
 			return new PagedResponse<>(Collections.emptyList(), movies.getNumber(), movies.getSize(),
 					movies.getTotalElements(), movies.getTotalPages(), movies.isLast());
 		}
-		//movies.getContent()
+		// movies.getContent()
 		List<MovieResponse> movieResponse = movies.map(movie -> {
 			return ModelMapper.mapMovieToMovieResponse(movie, likeRepository.countByMovieId(movie.getId()));
 		}).getContent();
-		
+
 		movieResponse = movieResponceAddGenreDto(movieResponse);
 		return new PagedResponse<>(movieResponse, movies.getNumber(), movies.getSize(), movies.getTotalElements(),
 				movies.getTotalPages(), movies.isLast());
 	}
 
 	private List<MovieResponse> movieResponceAddGenreDto(List<MovieResponse> movieResponse) {
-		for(MovieResponse movieResponse2: movieResponse) {
+		for (MovieResponse movieResponse2 : movieResponse) {
 			List<GenreDto> genreDtos = new ArrayList<>();
-			for(String genre: movieResponse2.getGenre()) {
+			for (String genre : movieResponse2.getGenre()) {
 				Genre genre2 = genreRepository.getOne(Long.parseLong(genre));
 				GenreDto dto = genreToGenreDto(genre2);
 				genreDtos.add(dto);
 			}
-			movieResponse2.setBaseUrl("https://image.tmdb.org/t/p/w500/");
+			movieResponse2.setBaseUrl(BASE_URL);
 			movieResponse2.setGenres(genreDtos);
 		}
 		return movieResponse;
@@ -301,8 +369,7 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public void movieDbScrap() {
-		Long year = 1955L;
-
+		Long year = 1855L;
 		LastScrapped lastScrappedDatabase = lastScrappedRepository.findFirstByOrderByIdDesc();
 		if (lastScrappedDatabase != null && lastScrappedDatabase.getYear() != null) {
 			movieScraps(lastScrappedDatabase, Long.parseLong(lastScrappedDatabase.getYear()));
@@ -324,20 +391,16 @@ public class MovieServiceImpl implements MovieService {
 	}
 
 	private void scrapMovieDB(LastScrapped lastScrappedDatabase, Long year, char c) {
-		String uri = "https://api.themoviedb.org/3/search/movie?api_key=00a7ed6256916ab89ee9dd2143df2e04&query=" + c
+		String uri = "https://api.themoviedb.org/3/search/movie?api_key=" + API_KEY + "&query=" + c
 				+ "&page=1&include_adult=true&year=" + year;
-
 		RestTemplate restTemplate = new RestTemplate();
 		MoviesDto moviesList = restTemplate.getForObject(uri, MoviesDto.class);
-
 		for (int i = 1; i <= moviesList.getTotal_pages(); i++) {
-			final String uri1 = "https://api.themoviedb.org/3/search/movie?api_key=00a7ed6256916ab89ee9dd2143df2e04&query="
-					+ c + "&page=" + i + "&include_adult=true&year=" + year;
-
+			final String uri1 = "https://api.themoviedb.org/3/search/movie?api_key=" + API_KEY + "&query=" + c
+					+ "&page=" + i + "&include_adult=true&year=" + year;
 			RestTemplate restTemplate1 = new RestTemplate();
 			MoviesDto moviesList1 = restTemplate1.getForObject(uri1, MoviesDto.class);
 			for (MovieDto movie : moviesList1.getResults()) {
-				System.out.println(movie.getTitle());
 				Movie movieDatabase = movieRepository.findByMovieId(Long.parseLong(movie.getId().toString()));
 				if (movieDatabase != null) {
 					if (movieDatabase.getMovieId() != Long.parseLong(movie.getId().toString())) {
@@ -353,7 +416,6 @@ public class MovieServiceImpl implements MovieService {
 	private void saveMovies(MovieDto movie, Long year, char c) {
 		movie.setGenre_ids(movieDbGenreToFlikGenre(movie.getGenre_ids()));
 		Movie movie1 = ModelMapper.mapMovieDtoToMovie(movie);
-
 		movieRepository.save(movie1);
 		System.out.println(movie1.getName());
 		LastScrapped lastScrapped = new LastScrapped();
@@ -364,10 +426,9 @@ public class MovieServiceImpl implements MovieService {
 	}
 
 	private List<String> movieDbGenreToFlikGenre(List<String> genre_ids) {
-		System.out.println(genre_ids);
 		List<String> genres = new ArrayList<String>();
 		for (String movieGenre : genre_ids) {
-			String uri = "https://api.themoviedb.org/3/genre/movie/list?api_key=00a7ed6256916ab89ee9dd2143df2e04";
+			String uri = "https://api.themoviedb.org/3/genre/movie/list?api_key=" + API_KEY;
 			RestTemplate restTemplate = new RestTemplate();
 			GenreDtos genreDto = restTemplate.getForObject(uri, GenreDtos.class);
 			for (GenreDto genreDto2 : genreDto.getGenres()) {
@@ -383,11 +444,9 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public void scrapGenre() {
-
-		String uri = "https://api.themoviedb.org/3/genre/movie/list?api_key=00a7ed6256916ab89ee9dd2143df2e04";
+		String uri = "https://api.themoviedb.org/3/genre/movie/list?api_key=" + API_KEY;
 		RestTemplate restTemplate = new RestTemplate();
 		GenreDtos genreDto = restTemplate.getForObject(uri, GenreDtos.class);
-
 		for (GenreDto genreDtos : genreDto.getGenres()) {
 			Genre genreDatabase = genreRepository.findByName(genreDtos.getName());
 			if (genreDatabase == null) {

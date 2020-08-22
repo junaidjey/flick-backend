@@ -97,27 +97,6 @@ public class UserController {
 
 		return userProfile;
 	}
-
-//	@GetMapping("/users/{username}/polls")
-//	public PagedResponse<PollResponse> getPollsCreatedBy(@PathVariable(value = "username") String username,
-//			@CurrentUser UserPrincipal currentUser,
-//			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
-//			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-//		return pollService.getPollsCreatedBy(username, currentUser, page, size);
-//	}
-//
-//	@GetMapping("/users/{username}/votes")
-//	public PagedResponse<PollResponse> getPollsVotedBy(@PathVariable(value = "username") String username,
-//			@CurrentUser UserPrincipal currentUser,
-//			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
-//			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-//		return pollService.getPollsVotedBy(username, currentUser, page, size);
-//	}
-
-//	@GetMapping(value = "/user/get-image", produces = MediaType.IMAGE_JPEG_VALUE)
-//	public @ResponseBody Resource getImage(@CurrentUser UserPrincipal currentUser) {
-//		return userService.getImage(currentUser.getId());
-//	}
 	
 	@GetMapping(value = "/user/get-image/{userId}", produces = MediaType.IMAGE_JPEG_VALUE)
 	public @ResponseBody Resource getImage(@PathVariable(value = "userId") String userId) {
@@ -129,28 +108,6 @@ public class UserController {
 		}
 		return userService.getImage(userIdL);
 	}
-
-//	@GetMapping(value = "/user/get-image")
-//	 @ResponseBody
-//	public  ResponseEntity<Resource> getImage(@CurrentUser UserPrincipal currentUser){
-//		//return userService.getImage(currentUser.getId());
-//		 Resource file = userService.getImage(currentUser.getId());
-//		return ResponseEntity.ok()
-//		        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-//		        .body(file);
-//	}
-
-//	@GetMapping(value = "/user/get-image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-//	public @ResponseBody byte [] getImage(@CurrentUser UserPrincipal currentUser) throws IOException{
-//		Resource resource = userService.getImage(currentUser.getId());
-//		InputStream input = resource.getInputStream();
-//		File file = resource.getFile();
-//		BufferedImage bufferimage = ImageIO.read(file);
-//	      ByteArrayOutputStream output = new ByteArrayOutputStream();
-//	      ImageIO.write(bufferimage, "jpg", output );
-//	      byte [] data = output.toByteArray();
-//	      return data;
-//	}
 
 	@GetMapping("/user/getallfiles")
 	public ResponseEntity<List<String>> getListFiles(@CurrentUser UserPrincipal currentUser) {

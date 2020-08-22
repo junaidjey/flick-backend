@@ -42,74 +42,11 @@ public class MovieController {
 	@Autowired
 	private MovieService movieService;
 
-	@Autowired
-	private LastScrappedRepository lastScrappedRepository;
-
-	@GetMapping("/scrapMovies")
-	public ResponseEntity<?> imdbScrap() throws IOException, ParseException {
-		String searchDate = "2019-08-15";
-		LastScrapped lastScrapped = lastScrappedRepository.findFirstByOrderByIdDesc();
-		String listNumber = "1";
-		if (lastScrapped != null) {
-			searchDate = lastScrapped.getSearchDate();
-			listNumber = lastScrapped.getListNumber();
-		}
-		String url = "https://www.imdb.com/search/title/?release_date=" + searchDate + "&start=";
-
-		ScrapMovieVariable scrapMovieVariable = fatchUrl(url + listNumber);
-		if (scrapMovieVariable.getTotalMovieRecords() > Integer.parseInt(listNumber)) {
-			for (int searchPage = scrapMovieVariable.getPageStart(); searchPage < scrapMovieVariable
-					.getTotalMovieRecords(); searchPage = searchPage + 50) {
-				System.out.println(searchPage);
-				movieService.scrapMovie(url + searchPage, searchDate);
-			}
-		}
-
-		LastScrapped lastScrapped2 = lastScrappedRepository.findFirstByOrderByIdDesc();
-		if (lastScrapped2 != null) {
-			searchDate = lastScrapped2.getSearchDate();
-			listNumber = lastScrapped2.getListNumber();
-		}
-		if (scrapMovieVariable.getTotalMovieRecords() <= Integer.parseInt(listNumber)) {
-			System.out.println("abcc");
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(sdf.parse(searchDate));
-
-			calendar.add(Calendar.DATE, 1); // number of days to add
-			String destDate = sdf.format(calendar.getTime());
-			System.out.println(destDate);
-
-			url = "https://www.imdb.com/search/title/?release_date=" + destDate + "&start=";
-			ScrapMovieVariable scrapMovieVariable2 = fatchUrl(url + "1");
-			for (int searchPage = scrapMovieVariable2.getPageStart(); searchPage < scrapMovieVariable2
-					.getTotalMovieRecords(); searchPage = searchPage + 50) {
-				System.out.println(searchPage);
-				movieService.scrapMovie(url + searchPage, destDate);
-			}
-			// fatchUrl(url);
-			// scrapMovieFromNewDate();
-		}
-		return ResponseEntity.ok(new ApiResponse(true, "Movie scraped succesfully"));
-	}
-
-	private ScrapMovieVariable fatchUrl(String url) throws IOException {
-		Document doc = Jsoup.connect(url).get();
-		Elements pageNumbersText = doc.select("div.desc");
-		System.out.println("Text = " + pageNumbersText.text());
-		String pageArray[] = pageNumbersText.text().split(" ");
-
-		int totalMovieRecords = Integer.parseInt(pageArray[2].replace(",", ""));
-
-		String pageMovie[] = pageArray[0].split("-");
-		int pageStart = Integer.parseInt(pageMovie[0].replace(",", ""));
-
-		ScrapMovieVariable scrapMovieVariable = new ScrapMovieVariable();
-		scrapMovieVariable.setTotalMovieRecords(totalMovieRecords);
-		scrapMovieVariable.setPageStart(pageStart);
-		return scrapMovieVariable;
-	}
+//	@GetMapping("/scrapMovies")
+//	public ResponseEntity<?> imdbScrap() throws IOException, ParseException {
+//		movieService.imdbScrap();
+//		return ResponseEntity.ok(new ApiResponse(true, "Movie scraped succesfully"));
+//	}
 
 	@GetMapping("/movies")
 	public @ResponseBody PagedResponse<MovieResponse> getMovies(
@@ -128,10 +65,8 @@ public class MovieController {
 	public ResponseEntity<?> movieDbScrap(){
 		movieService.scrapGenre();
 		movieService.movieDbScrap();
-		
 		return ResponseEntity.ok(new ApiResponse(true, "Movie scraped succesfully"));
 	}
-	
 	
 	public void movieDbScraps(){
 		movieService.scrapGenre();

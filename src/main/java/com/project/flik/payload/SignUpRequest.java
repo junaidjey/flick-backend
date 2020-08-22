@@ -9,21 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
  */
 
 public class SignUpRequest {
-//    @NotBlank
-//    @Size(min = 4, max = 40)
-//    private String name;
-
-//    @NotBlank
-//    @Size(min = 4, max = 40)
-//    private String firstName;
-//    
-//    @NotBlank
-//    @Size(min = 4, max = 40)
-//	private String lastName;
-//    
-//    @NotBlank
-//    @Size(min = 3, max = 15)
-//    private String username;
 
 	@NotBlank
 	@Size(max = 100)
@@ -38,43 +23,9 @@ public class SignUpRequest {
 	@Size(min = 6, max = 20)
 	private String password;
 
-//	private String username;
-
-//	@NotBlank
-//  @Size(min = 3, max = 15)
-//	private String birthDate;
-//	
-//	@NotBlank
-//    @Size(min = 3, max = 15)
-//	private String phoneNumber;
-//	
 	private String role;
-//	
-	private MultipartFile profilePic;
 
-//	public String getFirstName() {
-//		return firstName;
-//	}
-//
-//	public void setFirstName(String firstName) {
-//		this.firstName = firstName;
-//	}
-//
-//	public String getLastName() {
-//		return lastName;
-//	}
-//
-//	public void setLastName(String lastName) {
-//		this.lastName = lastName;
-//	}
-//
-//	public String getUsername() {
-//		return username;
-//	}
-//
-//	public void setUsername(String username) {
-//		this.username = username;
-//	}
+	private MultipartFile profilePic;
 
 	public String getEmail() {
 		return email;
@@ -108,30 +59,6 @@ public class SignUpRequest {
 		this.role = role;
 	}
 
-//	public String getBirthDate() {
-//		return birthDate;
-//	}
-//
-//	public void setBirthDate(String birthDate) {
-//		this.birthDate = birthDate;
-//	}
-//
-//	public String getPhoneNumber() {
-//		return phoneNumber;
-//	}
-//
-//	public void setPhoneNumber(String phoneNumber) {
-//		this.phoneNumber = phoneNumber;
-//	}
-//
-//	public String getJobType() {
-//		return jobType;
-//	}
-//
-//	public void setJobType(String jobType) {
-//		this.jobType = jobType;
-//	}
-//
 	public MultipartFile getProfilePic() {
 		return profilePic;
 	}
@@ -139,12 +66,4 @@ public class SignUpRequest {
 	public void setProfilePic(MultipartFile profilePic) {
 		this.profilePic = profilePic;
 	}
-
-//	@Override
-//	public String toString() {
-//		return "SignUpRequest [firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
-//				+ ", email=" + email + ", password=" + password + ", birthDate=" + birthDate + ", phoneNumber="
-//				+ phoneNumber + ", jobType=" + jobType + ", profilePic=" + profilePic + "]";
-//	}
-
 }

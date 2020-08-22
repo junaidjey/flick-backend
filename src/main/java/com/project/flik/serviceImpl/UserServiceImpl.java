@@ -1,6 +1,5 @@
 package com.project.flik.serviceImpl;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;

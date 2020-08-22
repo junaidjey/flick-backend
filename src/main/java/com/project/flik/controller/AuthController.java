@@ -97,15 +97,15 @@ public class AuthController {
 		User result = userRepository.save(user);
 
 		String ProfilePicPath = storageService.saveUserProfilePic(signUpRequest.getProfilePic(), user.getId());
-		if(signUpRequest.getProfilePic()!=null) {
+		if (signUpRequest.getProfilePic() != null) {
 			result.setProfilePic(ProfilePicPath);
-			userRepository.updateProfilePic(ProfilePicPath, signUpRequest.getProfilePic().getOriginalFilename(), result.getId());
+			userRepository.updateProfilePic(ProfilePicPath, signUpRequest.getProfilePic().getOriginalFilename(),
+					result.getId());
 		}
-		
+
 		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{email}")
 				.buildAndExpand(result.getEmail()).toUri();
 
 		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
 	}
-
 }
