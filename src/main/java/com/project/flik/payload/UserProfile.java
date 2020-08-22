@@ -9,6 +9,8 @@ public class UserProfile {
     private Instant joinedAt;
    // private Long pollCount;
     private Long likeCount;
+    private Long following;
+    private Long followers;
 
 //    public UserProfile(Long id, String username, String name, Instant joinedAt, Long pollCount, Long likeCount) {
 //        this.id = id;
@@ -18,12 +20,14 @@ public class UserProfile {
 //        this.pollCount = pollCount;
 //        this.likeCount = likeCount;
 //    }
-    public UserProfile(Long id, String username, String name, Instant joinedAt, Long likeCount) {
+    public UserProfile(Long id, String username, String name, Instant joinedAt, Long likeCount, Long following, Long followers) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.joinedAt = joinedAt;
         this.likeCount = likeCount;
+        this.followers = followers;
+        this.following = following;
     }
 
     public Long getId() {
@@ -72,6 +76,22 @@ public class UserProfile {
 
 	public void setLikeCount(Long likeCount) {
 		this.likeCount = likeCount;
+	}
+
+	public Long getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(Long following) {
+		this.following = following;
+	}
+
+	public Long getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(Long followers) {
+		this.followers = followers;
 	}
 
 }

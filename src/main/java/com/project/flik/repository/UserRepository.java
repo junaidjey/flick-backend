@@ -30,9 +30,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	Boolean existsByEmail(String email);
 
-//	@Transactional
-//	@Modifying
-//	@Query("UPDATE User usr SET usr.profilePic = :profilePic, usr.imageName=:imageName WHERE usr.id = :id")
-//	void updateProfilePic(@Param("profilePic") String profilePic, @Param("imageName") String imageName,
-//			@Param("id") Long id);
+	@Transactional
+	@Modifying
+	@Query("UPDATE User usr SET usr.profilePic = :profilePic, usr.imageName=:imageName WHERE usr.id = :id")
+	void updateProfilePic(@Param("profilePic") String profilePic, @Param("imageName") String imageName,
+			@Param("id") Long id);
 }

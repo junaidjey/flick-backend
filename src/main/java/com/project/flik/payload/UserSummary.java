@@ -1,37 +1,58 @@
 package com.project.flik.payload;
 
 public class UserSummary {
-    private Long id;
-    private String username;
-    private String name;
+	private Long id;
+	private String email;
+	private String fullName;
+	private Long following;
+	private Long followers;
 
-    public UserSummary(Long id, String username, String name) {
-        this.id = id;
-        this.username = username;
-        this.name = name;
-    }
+	public UserSummary(Long id, String fullName, String email, Long following, Long followers) {
+		this.id = id;
+		this.email = email;
+		this.fullName = fullName;
+		this.followers = followers;
+		this.following = following;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getFullName() {
+		return fullName;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Long getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(Long following) {
+		this.following = following;
+	}
+
+	public Long getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(Long followers) {
+		this.followers = followers;
+	}
+
 }

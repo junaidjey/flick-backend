@@ -3,9 +3,11 @@ package com.project.flik.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.project.flik.model.Product;
+import com.project.flik.model.Genre;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long>{
+public interface GenreRepository extends JpaRepository<Genre, Long>{
+
+	Genre findByName(String name);
 
 }

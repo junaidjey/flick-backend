@@ -13,4 +13,8 @@ public interface MovieService {
 	PagedResponse<MovieResponse> getAllMovies(int page, int size);
 
 	MovieResponse castLikesAndGetUpdatedMovie(Long movieId, UserPrincipal currentUser);
+
+	void movieDbScrap();
+
+	void scrapGenre();
 }

@@ -1,6 +1,9 @@
 package com.project.flik.payload;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import com.project.flik.dto.GenreDto;
 
 public class MovieResponse {
 	private Long id;
@@ -8,13 +11,17 @@ public class MovieResponse {
 	private String url;
 	private String name;
 	private String runTime;
-	private ArrayList<String> genre;
+	//private ArrayList<String> genre;
+	private List<String> genre = new ArrayList<>();
+	
+	private List<GenreDto> genres = new ArrayList<>();
 	private String description;
 	private String season;
 	private String episode;
 	private Long refranceMovie;
 	private String releaseDate;
 	private Long likes;
+	private String baseUrl;
 	public Long getId() {
 		return id;
 	}
@@ -45,14 +52,21 @@ public class MovieResponse {
 	public void setRunTime(String runTime) {
 		this.runTime = runTime;
 	}
-	public ArrayList<String> getGenre() {
-		return genre;
-	}
-	public void setGenre(ArrayList<String> genre) {
-		this.genre = genre;
-	}
+//	public ArrayList<String> getGenre() {
+//		return genre;
+//	}
+//	public void setGenre(ArrayList<String> genre) {
+//		this.genre = genre;
+//	}
+	
 	public String getDescription() {
 		return description;
+	}
+	public List<String> getGenre() {
+		return genre;
+	}
+	public void setGenre(List<String> genre) {
+		this.genre = genre;
 	}
 	public void setDescription(String description) {
 		this.description = description;
@@ -86,5 +100,18 @@ public class MovieResponse {
 	}
 	public void setLikes(Long likes) {
 		this.likes = likes;
+	}
+	public List<GenreDto> getGenres() {
+		return genres;
+	}
+	public void setGenres(List<GenreDto> genres) {
+		this.genres = genres;
+	}
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
 	}	
+	
 }

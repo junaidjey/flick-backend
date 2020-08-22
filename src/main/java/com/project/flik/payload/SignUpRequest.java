@@ -50,7 +50,7 @@ public class SignUpRequest {
 //	
 	private String role;
 //	
-//	private MultipartFile profilePic;
+	private MultipartFile profilePic;
 
 //	public String getFirstName() {
 //		return firstName;
@@ -132,13 +132,13 @@ public class SignUpRequest {
 //		this.jobType = jobType;
 //	}
 //
-//	public MultipartFile getProfilePic() {
-//		return profilePic;
-//	}
-//
-//	public void setProfilePic(MultipartFile profilePic) {
-//		this.profilePic = profilePic;
-//	}
+	public MultipartFile getProfilePic() {
+		return profilePic;
+	}
+
+	public void setProfilePic(MultipartFile profilePic) {
+		this.profilePic = profilePic;
+	}
 
 //	@Override
 //	public String toString() {

@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,16 +18,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
+import com.project.flik.dto.MovieDto;
+import com.project.flik.dto.MoviesDto;
 import com.project.flik.model.LastScrapped;
+import com.project.flik.model.Movie;
+import com.project.flik.payload.ApiResponse;
 import com.project.flik.payload.MovieResponse;
 import com.project.flik.payload.PagedResponse;
 import com.project.flik.payload.ScrapMovieVariable;
 import com.project.flik.repository.LastScrappedRepository;
+import com.project.flik.repository.MovieRepository;
 import com.project.flik.security.CurrentUser;
 import com.project.flik.security.UserPrincipal;
 import com.project.flik.service.MovieService;
 import com.project.flik.util.AppConstants;
+import com.project.flik.util.ModelMapper;
 
 @Controller
 @RequestMapping("/api")
@@ -37,8 +45,8 @@ public class MovieController {
 	@Autowired
 	private LastScrappedRepository lastScrappedRepository;
 
-	@GetMapping("/")
-	public void imdbScrap() throws IOException, ParseException {
+	@GetMapping("/scrapMovies")
+	public ResponseEntity<?> imdbScrap() throws IOException, ParseException {
 		String searchDate = "2019-08-15";
 		LastScrapped lastScrapped = lastScrappedRepository.findFirstByOrderByIdDesc();
 		String listNumber = "1";
@@ -56,8 +64,7 @@ public class MovieController {
 				movieService.scrapMovie(url + searchPage, searchDate);
 			}
 		}
-		
-		
+
 		LastScrapped lastScrapped2 = lastScrappedRepository.findFirstByOrderByIdDesc();
 		if (lastScrapped2 != null) {
 			searchDate = lastScrapped2.getSearchDate();
@@ -81,9 +88,10 @@ public class MovieController {
 				System.out.println(searchPage);
 				movieService.scrapMovie(url + searchPage, destDate);
 			}
-			//fatchUrl(url);
+			// fatchUrl(url);
 			// scrapMovieFromNewDate();
 		}
+		return ResponseEntity.ok(new ApiResponse(true, "Movie scraped succesfully"));
 	}
 
 	private ScrapMovieVariable fatchUrl(String url) throws IOException {
@@ -107,7 +115,7 @@ public class MovieController {
 	public @ResponseBody PagedResponse<MovieResponse> getMovies(
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-		return movieService.getAllMovies(page-1, size);
+		return movieService.getAllMovies(page - 1, size);
 	}
 
 	@PostMapping("/{movieId}/likes")
@@ -115,4 +123,18 @@ public class MovieController {
 	public MovieResponse castLike(@CurrentUser UserPrincipal currentUser, @PathVariable Long movieId) {
 		return movieService.castLikesAndGetUpdatedMovie(movieId, currentUser);
 	}
-}
+
+	@GetMapping("/scrapMovieDB")
+	public ResponseEntity<?> movieDbScrap(){
+		movieService.scrapGenre();
+		movieService.movieDbScrap();
+		
+		return ResponseEntity.ok(new ApiResponse(true, "Movie scraped succesfully"));
+	}
+	
+	
+	public void movieDbScraps(){
+		movieService.scrapGenre();
+		movieService.movieDbScrap();
+	}
+} 
