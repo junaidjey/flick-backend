@@ -10,9 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
-import com.project.flik.IMDBScrap.IMDB;
-import com.project.flik.controller.MovieController;
-
 @SpringBootApplication
 @EntityScan(basePackageClasses = {
 		FLiKApplication.class,

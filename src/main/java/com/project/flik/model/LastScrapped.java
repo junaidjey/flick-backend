@@ -24,6 +24,10 @@ public class LastScrapped {
     private String listNumber;
     
     private String searchDate;
+    
+    private String year;
+    
+    private char keyword;
 
 	public Long getId() {
 		return id;
@@ -56,4 +60,21 @@ public class LastScrapped {
 	public void setSearchDate(String searchDate) {
 		this.searchDate = searchDate;
 	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public char getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(char keyword) {
+		this.keyword = keyword;
+	}
+	
 }

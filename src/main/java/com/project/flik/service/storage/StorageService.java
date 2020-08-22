@@ -22,12 +22,14 @@ public class StorageService {
 	private final Path rootLocation = Paths.get("upload-dir");
 
 	public void store(MultipartFile file, String directory) {
-		Path fileLocation = Paths.get(directory);
-		try {
-			Files.copy(file.getInputStream(), fileLocation.resolve(file.getOriginalFilename()));
-		} catch (Exception e) {
-			throw new RuntimeException("FAIL!");
-		}
+		if(file!=null) {
+			Path fileLocation = Paths.get(directory);
+			try {
+				Files.copy(file.getInputStream(), fileLocation.resolve(file.getOriginalFilename()));
+			} catch (Exception e) {
+				throw new RuntimeException("FAIL!");
+			}
+		}	
 	}
 
 	public Resource loadFile(String filename) {
@@ -51,7 +53,7 @@ public class StorageService {
 			if (resource.exists() || resource.isReadable()) {
 				return resource;
 			} else {
-				throw new RuntimeException("FAIL!");
+				return null;
 			}
 		} catch (MalformedURLException e) {
 			throw new RuntimeException("FAIL!");
@@ -84,7 +86,7 @@ public class StorageService {
 	}
 
 	public String saveUserProfilePic(MultipartFile profilePic, Long id) {
-		String directory = "\\" + "User" + "\\" + id + "\\";
+		String directory = "/" + "User" + "/" + id + "/";
 		String fullDirecoryPath = rootLocation + directory;
 		File file = new File(fullDirecoryPath);
 		boolean dirCreated = file.mkdirs();

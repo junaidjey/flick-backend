@@ -23,7 +23,7 @@ import org.hibernate.annotations.NaturalId;
 import com.project.flik.model.audit.DateAudit;
 
 /**
- * Created by rajeevkumarsingh on 01/08/17.
+ * Created by junaid on 01/08/17.
  */
 
 @Entity
@@ -80,9 +80,9 @@ public class User extends DateAudit {
 //    @Size(max = 15)
 //	private String phoneNumber;
 //	
-//	private String profilePic;
+	private String profilePic;
 //	
-//	private String imageName;
+	private String imageName;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
@@ -192,19 +192,19 @@ public class User extends DateAudit {
         this.roles = roles;
     }
 
-//	public String getProfilePic() {
-//		return profilePic;
-//	}
-//
-//	public void setProfilePic(String profilePic) {
-//		this.profilePic = profilePic;
-//	}
-//
-//	public String getImageName() {
-//		return imageName;
-//	}
-//
-//	public void setImageName(String imageName) {
-//		this.imageName = imageName;
-//	}
+	public String getProfilePic() {
+		return profilePic;
+	}
+
+	public void setProfilePic(String profilePic) {
+		this.profilePic = profilePic;
+	}
+
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
 }

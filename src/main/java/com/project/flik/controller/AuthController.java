@@ -16,7 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.project.flik.exception.AppException;
@@ -31,10 +33,9 @@ import com.project.flik.repository.RoleRepository;
 import com.project.flik.repository.UserRepository;
 import com.project.flik.security.JwtTokenProvider;
 import com.project.flik.service.storage.StorageService;
-import com.project.flik.util.Utill;
 
 /**
- * Created by rajeevkumarsingh on 02/08/17.
+ * Created by junaid on 02/08/17.
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -72,7 +73,7 @@ public class AuthController {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+	public ResponseEntity<?> registerUser(@Valid SignUpRequest signUpRequest) {
 
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
 			return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"), HttpStatus.BAD_REQUEST);
@@ -95,43 +96,16 @@ public class AuthController {
 
 		User result = userRepository.save(user);
 
+		String ProfilePicPath = storageService.saveUserProfilePic(signUpRequest.getProfilePic(), user.getId());
+		if (signUpRequest.getProfilePic() != null) {
+			result.setProfilePic(ProfilePicPath);
+			userRepository.updateProfilePic(ProfilePicPath, signUpRequest.getProfilePic().getOriginalFilename(),
+					result.getId());
+		}
+
 		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{email}")
 				.buildAndExpand(result.getEmail()).toUri();
 
 		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
 	}
-
-//	@SuppressWarnings({ "rawtypes", "unchecked" })
-//	@PostMapping("/signup")
-//	public ResponseEntity<?> registerUser(@Valid SignUpRequest signUpRequest) {
-//		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-//			return new ResponseEntity(new ApiResponse(false, "Username is already taken!"), HttpStatus.BAD_REQUEST);
-//		}
-//
-//		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-//			return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"), HttpStatus.BAD_REQUEST);
-//		}
-//
-//		// Creating user's account
-//		User user = new User(signUpRequest.getFirstName(), signUpRequest.getLastName(), signUpRequest.getUsername(),
-//				signUpRequest.getEmail(), signUpRequest.getPassword(),
-//				Utill.stringToUtillDate(signUpRequest.getBirthDate()), signUpRequest.getPhoneNumber());
-//
-//		user.setPassword(passwordEncoder.encode(user.getPassword()));
-//
-//		Role userRole = roleRepository.findByName(RoleName.valueOf(signUpRequest.getJobType()))
-//				.orElseThrow(() -> new AppException("User Role not set."));
-//
-//		user.setRoles(Collections.singleton(userRole));
-//
-//		User result = userRepository.save(user);
-//
-//		String ProfilePicPath = storageService.saveUserProfilePic(signUpRequest.getProfilePic(), user.getId());
-//		result.setProfilePic(ProfilePicPath);
-//		userRepository.updateProfilePic(ProfilePicPath, signUpRequest.getProfilePic().getOriginalFilename(), result.getId());
-//		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{username}")
-//				.buildAndExpand(result.getUsername()).toUri();
-//
-//		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
-//	}
 }
